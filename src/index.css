@@ -90,21 +90,25 @@
 }
 
 .dark .glass-card {
-  @apply bg-[#333]/80 border-white/10;
+  @apply bg-[#111]/90 border-gray-800;
 }
 
 .light-mode .glass-card {
   @apply bg-white/90 border-gray-200;
 }
 
-.search-bar {
-  @apply backdrop-blur-md transition-colors duration-300;
+.card-container {
+  @apply bg-[#111] rounded-lg p-4 transition-colors duration-300;
 }
 
-.dark .search-bar {
-  @apply bg-[#222]/80;
+.light-mode .card-container {
+  @apply bg-white shadow-md;
 }
 
-.light-mode .search-bar {
-  @apply bg-white/90 shadow-sm;
+.dark .chart-line {
+  @apply stroke-white;
+}
+
+.light-mode .chart-line {
+  @apply stroke-gray-800;
 }
