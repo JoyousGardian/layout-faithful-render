@@ -15,8 +15,8 @@ const LineChart: React.FC<LineChartProps> = ({ data, color, title, yAxisLabel })
   
   return (
     <div className={`rounded-lg p-4 ${theme === 'light' ? 'bg-white border border-gray-200' : 'bg-[#111]'}`}>
-      <h3 className={`text-lg font-semibold mb-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>{title}</h3>
-      <div className="h-[200px] relative">
+      <h3 className={`text-sm font-medium mb-2 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>{title}</h3>
+      <div className="h-[150px] relative">
         <ResponsiveContainer width="100%" height="100%">
           <RechartsLineChart data={data}>
             <Line 

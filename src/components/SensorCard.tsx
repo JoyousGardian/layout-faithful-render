@@ -13,13 +13,13 @@ const SensorCard: React.FC<SensorCardProps> = ({ title, value, unit, color = 'te
   const { theme } = useTheme();
   
   return (
-    <div className={`p-4 rounded-lg ${theme === 'light' ? 'bg-white border border-gray-200' : 'bg-[#111]'}`}>
-      <h3 className={`text-sm font-medium uppercase mb-3 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
+    <div className={`p-3 rounded-lg ${theme === 'light' ? 'bg-white border border-gray-200' : 'bg-[#111]'}`}>
+      <h3 className={`text-xs font-medium uppercase mb-1 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
         {title}
       </h3>
-      <p className={`text-3xl font-bold ${color}`}>
+      <p className={`text-xl font-bold ${color}`}>
         {value}
-        {unit && <span className="text-lg ml-1">{unit}</span>}
+        {unit && <span className="text-sm ml-1">{unit}</span>}
       </p>
     </div>
   );
