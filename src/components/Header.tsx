@@ -34,32 +34,32 @@ const Header = () => {
   };
 
   return (
-    <div className={`flex items-center justify-between p-4 search-bar rounded-full mx-auto mb-8 ${theme === 'light' ? 'bg-white/90 shadow-sm' : 'bg-[#222]/80'}`}>
+    <div className={`flex items-center justify-between p-3 px-4 search-bar rounded-full mx-auto mb-8 ${theme === 'light' ? 'bg-white/90 shadow-sm' : 'bg-[#222]/80'}`}>
       <div className="flex items-center gap-4">
-        <button className={`flex items-center justify-center rounded-full ${theme === 'light' ? 'bg-gray-200' : 'bg-[#222]'} p-3 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+        <button className={`flex items-center justify-center rounded-full ${theme === 'light' ? 'bg-gray-200' : 'bg-[#222]'} p-2`}>
           <div className="grid grid-cols-2 gap-1">
-            <div className={`w-2 h-2 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
-            <div className={`w-2 h-2 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
-            <div className={`w-2 h-2 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
-            <div className={`w-2 h-2 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
+            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
+            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
+            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
+            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
           </div>
         </button>
-        <div className={`flex items-center gap-2 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-          <ArrowLeft size={20} />
-          <span className="text-xl">Map</span>
+        <div className={`flex items-center gap-1 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
+          <ArrowLeft size={16} />
+          <span className="text-sm font-medium">Map</span>
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <Search className={theme === 'light' ? 'text-gray-800' : 'text-white'} size={20} />
+        <Search className={theme === 'light' ? 'text-gray-800' : 'text-white'} size={14} />
         <Toggle 
           pressed={theme === 'light'}
           onPressedChange={toggleTheme} 
-          className={`flex items-center justify-center rounded-full ${theme === 'light' ? 'border border-gray-200' : 'border border-white/20'} p-1.5`}
+          className={`flex items-center justify-center rounded-full ${theme === 'light' ? 'border border-gray-200' : 'border border-white/20'} p-1`}
         >
           {theme === 'light' ? (
-            <Sun className="text-gray-800" size={16} />
+            <Sun className="text-gray-800" size={14} />
           ) : (
-            <Moon className="text-white" size={16} />
+            <Moon className="text-white" size={14} />
           )}
         </Toggle>
       </div>
