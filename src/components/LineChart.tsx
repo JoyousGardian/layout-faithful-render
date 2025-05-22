@@ -1,30 +1,81 @@
 
 import React from 'react';
-import { LineChart as RechartsLineChart, Line, ResponsiveContainer } from 'recharts';
+import { 
+  LineChart as RechartsLineChart, 
+  Line, 
+  ResponsiveContainer, 
+  XAxis, 
+  YAxis, 
+  Tooltip,
+  CartesianGrid
+} from 'recharts';
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface LineChartProps {
-  data: { value: number }[];
+  data: { value: number; name?: string }[];
   color: string;
   title: string;
   yAxisLabel?: string;
+  xAxisLabel?: string;
 }
 
-const LineChart: React.FC<LineChartProps> = ({ data, color, title, yAxisLabel }) => {
+const LineChart: React.FC<LineChartProps> = ({ 
+  data, 
+  color, 
+  title, 
+  yAxisLabel,
+  xAxisLabel 
+}) => {
   const { theme } = useTheme();
   
+  // Prepare data with names if not provided
+  const chartData = data.map((item, index) => ({
+    ...item,
+    name: item.name || `${index + 1}h`
+  }));
+
   return (
     <div className={`rounded-lg p-4 ${theme === 'light' ? 'bg-white border border-gray-200' : 'bg-[#111]'}`}>
       <h3 className={`text-sm font-medium mb-2 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>{title}</h3>
       <div className="h-[150px] relative">
         <ResponsiveContainer width="100%" height="100%">
-          <RechartsLineChart data={data}>
+          <RechartsLineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+            <CartesianGrid 
+              strokeDasharray="3 3" 
+              vertical={false} 
+              stroke={theme === 'light' ? "#eee" : "#333"} 
+            />
+            <XAxis 
+              dataKey="name" 
+              tick={{ fontSize: 10 }} 
+              tickLine={false}
+              axisLine={{ stroke: theme === 'light' ? "#ddd" : "#444" }}
+              stroke={theme === 'light' ? "#888" : "#666"}
+            />
+            <YAxis 
+              tick={{ fontSize: 10 }} 
+              tickLine={false}
+              axisLine={{ stroke: theme === 'light' ? "#ddd" : "#444" }}
+              stroke={theme === 'light' ? "#888" : "#666"}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: theme === 'light' ? 'white' : '#111',
+                borderColor: theme === 'light' ? '#ddd' : '#333',
+                borderRadius: '4px',
+                fontSize: '12px',
+                color: theme === 'light' ? '#333' : '#ddd'
+              }}
+              formatter={(value: number) => [`${value}`, yAxisLabel || 'Value']}
+              labelFormatter={(label) => xAxisLabel ? `${xAxisLabel}: ${label}` : label}
+            />
             <Line 
               type="monotone" 
               dataKey="value" 
               stroke={color} 
               strokeWidth={2}
               dot={false}
+              activeDot={{ r: 4, fill: color, stroke: theme === 'light' ? 'white' : '#111' }}
             />
           </RechartsLineChart>
         </ResponsiveContainer>

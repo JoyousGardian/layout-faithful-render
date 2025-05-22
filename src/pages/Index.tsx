@@ -11,12 +11,21 @@ import WindCard from '@/components/WindCard';
 import LiveCamCard from '@/components/LiveCamCard';
 import TabSelector from '@/components/TabSelector';
 
-// Sample data
-const windData = Array.from({ length: 20 }, (_, i) => ({ value: 10 + Math.random() * 20 }));
-const tempData = Array.from({ length: 20 }, (_, i) => ({ value: 15 + Math.random() * 15 }));
-const pressureData = Array.from({ length: 20 }, (_, i) => ({ value: 990 + Math.random() * 10 }));
-const otherTempData = Array.from({ length: 20 }, (_, i) => ({ value: 5 + Math.random() * 30 }));
-const flatLineData = Array.from({ length: 20 }, (_, i) => ({ value: 50 }));
+// Sample data with time labels
+const windData = Array.from({ length: 12 }, (_, i) => ({ 
+  name: `${i*2}h`, 
+  value: 10 + Math.random() * 20 
+}));
+
+const tempData = Array.from({ length: 12 }, (_, i) => ({ 
+  name: `${i*2}h`, 
+  value: 15 + Math.random() * 15 
+}));
+
+const pressureData = Array.from({ length: 12 }, (_, i) => ({ 
+  name: `${i*2}h`, 
+  value: 990 + Math.random() * 10 
+}));
 
 const Index = () => {
   const { theme } = useTheme();
@@ -41,7 +50,8 @@ const Index = () => {
                 data={windData} 
                 color="#FFEB3B" 
                 title="Wind Speed" 
-                yAxisLabel="Wind Speed MPH"
+                yAxisLabel="Wind Speed"
+                xAxisLabel="Time"
               />
             </div>
             
@@ -50,13 +60,15 @@ const Index = () => {
               color="#2196F3" 
               title="Outdoor Temperature" 
               yAxisLabel="Temperature °F"
+              xAxisLabel="Time"
             />
             
             <LineChart 
-              data={otherTempData} 
+              data={pressureData} 
               color="#4CAF50" 
               title="Barometric Pressure" 
               yAxisLabel="Pressure (mb)"
+              xAxisLabel="Time"
             />
             
             <PressureCard 
