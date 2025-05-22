@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Moon, Sun } from 'lucide-react';
 import { Toggle } from "@/components/ui/toggle";
 import { useToast } from "@/hooks/use-toast";
+import { Switch } from "@/components/ui/switch";
 
 const Header = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
@@ -34,34 +35,36 @@ const Header = () => {
   };
 
   return (
-    <div className={`flex items-center justify-between p-3 px-4 search-bar rounded-full mx-auto mb-8 ${theme === 'light' ? 'bg-white/90 shadow-sm' : 'bg-[#222]/80'}`}>
-      <div className="flex items-center gap-4">
-        <button className={`flex items-center justify-center rounded-full ${theme === 'light' ? 'bg-gray-200' : 'bg-[#222]'} p-2`}>
+    <div className="flex items-center justify-between px-4 py-2 bg-[#121212] mx-auto mb-8">
+      <div className="flex items-center gap-6">
+        <button className="flex items-center justify-center rounded-full bg-[#252525] p-2.5">
           <div className="grid grid-cols-2 gap-1">
-            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
-            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
-            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
-            <div className={`w-1.5 h-1.5 ${theme === 'light' ? 'bg-gray-500/80' : 'bg-white/80'} rounded-sm`}></div>
+            <div className="w-1.5 h-1.5 bg-white/70 rounded-sm"></div>
+            <div className="w-1.5 h-1.5 bg-white/70 rounded-sm"></div>
+            <div className="w-1.5 h-1.5 bg-white/70 rounded-sm"></div>
+            <div className="w-1.5 h-1.5 bg-white/70 rounded-sm"></div>
           </div>
         </button>
-        <div className={`flex items-center gap-1 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-          <ArrowLeft size={16} />
-          <span className="text-sm font-medium">Map</span>
+        <div className="flex items-center gap-3 text-white">
+          <ArrowLeft size={24} strokeWidth={2} />
+          <span className="text-lg font-medium">Map</span>
         </div>
       </div>
-      <div className="flex items-center gap-4">
-        <Search className={theme === 'light' ? 'text-gray-800' : 'text-white'} size={14} />
-        <Toggle 
-          pressed={theme === 'light'}
-          onPressedChange={toggleTheme} 
-          className={`flex items-center justify-center rounded-full ${theme === 'light' ? 'border border-gray-200' : 'border border-white/20'} p-1`}
-        >
-          {theme === 'light' ? (
-            <Sun className="text-gray-800" size={14} />
-          ) : (
-            <Moon className="text-white" size={14} />
-          )}
-        </Toggle>
+      <div className="flex items-center gap-6">
+        <Search className="text-white" size={24} strokeWidth={2} />
+        <div className="bg-[#252525] rounded-full px-1 py-1 flex items-center">
+          <div className={`p-0.5 rounded-full transition-all duration-150 ${theme === 'light' ? 'bg-white' : 'bg-transparent'}`}>
+            <Sun className={theme === 'light' ? 'text-black' : 'text-white/70'} size={20} />
+          </div>
+          <Switch 
+            checked={theme === 'light'} 
+            onCheckedChange={toggleTheme} 
+            className="mx-0.5 data-[state=checked]:bg-transparent data-[state=unchecked]:bg-transparent border-0"
+          />
+          <div className={`p-0.5 rounded-full transition-all duration-150 ${theme === 'dark' ? 'bg-[#555]' : 'bg-transparent'}`}>
+            <Moon className={theme === 'dark' ? 'text-white' : 'text-white/70'} size={20} />
+          </div>
+        </div>
       </div>
     </div>
   );
