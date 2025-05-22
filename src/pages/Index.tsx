@@ -1,179 +1,101 @@
 
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
-import Navbar from '@/components/Navbar';
-import LineChart from '@/components/LineChart';
-import RainfallCard from '@/components/RainfallCard';
-import SensorCard from '@/components/SensorCard';
-import PressureCard from '@/components/PressureCard';
-import WetBulbCard from '@/components/WetBulbCard';
-import WindCard from '@/components/WindCard';
-import LiveCamCard from '@/components/LiveCamCard';
-import TabSelector from '@/components/TabSelector';
-import { getXAxisDataSet, getYAxisDataSet } from '@/lib/utils';
+import Header from '../components/Header';
+import Map from '../components/Map';
+import WeatherCard from '../components/WeatherCard';
+import Footer from '../components/Footer';
 
-// Sample data with time labels for simulation
-const generateWindData = () => Array.from({ length: 12 }, (_, i) => ({ 
-  time: `${i*2}h`, 
-  value: 10 + Math.random() * 20 
-}));
-
-const generateTempData = () => Array.from({ length: 12 }, (_, i) => ({ 
-  time: `${i*2}h`, 
-  value: 15 + Math.random() * 15 
-}));
-
-const generatePressureData = () => Array.from({ length: 12 }, (_, i) => ({ 
-  time: `${i*2}h`, 
-  value: 990 + Math.random() * 10 
-}));
+const weatherData = [
+  {
+    temperature: "80.9",
+    location: "Systems Atlanta",
+    humidity: "81.5%",
+    dewPoint: "71.9°F",
+  },
+  {
+    temperature: "80.9",
+    location: "Systems Atlanta",
+    humidity: "81.5%",
+    dewPoint: "71.9°F",
+  },
+  {
+    temperature: "80.9",
+    location: "Systems Atlanta",
+    humidity: "81.5%",
+    dewPoint: "71.9°F",
+  },
+  {
+    temperature: "80.9",
+    location: "Systems Atlanta",
+    humidity: "81.5%",
+    dewPoint: "71.9°F",
+  },
+];
 
 const Index = () => {
-  const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState('Forecast');
-  const [liveCamUrl, setLiveCamUrl] = useState('/placeholder.svg');
-  
-  // State for real-time data
-  const [windDetails, setWindDetails] = useState(generateWindData());
-  const [tempDetails, setTempDetails] = useState(generateTempData());
-  const [pressureDetails, setPressureDetails] = useState(generatePressureData());
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  // Simulate real-time updates every 5 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setWindDetails(generateWindData());
-      setTempDetails(generateTempData());
-      setPressureDetails(generatePressureData());
-    }, 5000);
+    const updateTheme = () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        setTheme(savedTheme as 'dark' | 'light');
+      }
+    };
+
+    // Initial check
+    updateTheme();
+
+    // Set up event listener for theme changes
+    window.addEventListener('storage', updateTheme);
     
-    return () => clearInterval(interval);
+    // Observe changes to DOM for theme class changes
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          const hasLightMode = document.documentElement.classList.contains('light-mode');
+          setTheme(hasLightMode ? 'light' : 'dark');
+        }
+      }
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => {
+      window.removeEventListener('storage', updateTheme);
+      observer.disconnect();
+    };
   }, []);
-  
+
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      theme === 'light' ? 'bg-gray-100' : 'bg-black'
-    }`}>
-      <Navbar />
-      
-      <div className="p-4 md:p-6 max-w-[1600px] mx-auto">
-        <div className="grid grid-cols-12 gap-4">
-          {/* Left column - Charts */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-4 space-y-4">
-            <div>
-              <h2 className={`text-lg font-bold mb-4 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-                Measurement Trends
-              </h2>
-              <LineChart 
-                xDataset={getXAxisDataSet(windDetails)}
-                yDataset={getYAxisDataSet(windDetails)}
-                color="#FFEB3B" 
-                title="Wind Speed" 
-                yAxisLabel="Wind Speed"
-                xAxisLabel="Time"
-              />
-            </div>
-            
-            <LineChart 
-              xDataset={getXAxisDataSet(tempDetails)}
-              yDataset={getYAxisDataSet(tempDetails)}
-              color="#2196F3" 
-              title="Outdoor Temperature" 
-              yAxisLabel="Temperature °F"
-              xAxisLabel="Time"
-            />
-            
-            <LineChart 
-              xDataset={getXAxisDataSet(pressureDetails)}
-              yDataset={getYAxisDataSet(pressureDetails)}
-              color="#4CAF50" 
-              title="Barometric Pressure" 
-              yAxisLabel="Pressure (mb)"
-              xAxisLabel="Time"
-            />
-            
-            <PressureCard 
-              title="Pressure Measurements" 
-              pressure="990.6" 
-              seaLevelPressure="990.6" 
-            />
+    <div className={`min-h-screen ${theme === 'light' ? 'bg-gray-50' : 'bg-black'} p-6 transition-colors duration-300`}>
+      <div className="max-w-screen-xl mx-auto">
+        <Header />
+        
+        <h1 className={`${theme === 'light' ? 'text-gray-800' : 'text-white'} text-2xl font-bold mb-6 transition-colors duration-300`}>RadarOmega - Cams</h1>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3 h-[500px]">
+            <Map />
           </div>
           
-          {/* Middle column - Rainfall data and camera feed */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-8 space-y-4">
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className={`text-lg font-bold ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-                  Rainfall Measurements
-                </h2>
-                <TabSelector
-                  tabs={['Forecast', 'Air Quality']}
-                  activeTab={activeTab}
-                  onTabChange={setActiveTab}
-                />
-              </div>
-              
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <RainfallCard title="60 Minutes" value="0.00" />
-                <RainfallCard title="Since Midnight" value="0.00" />
-                <RainfallCard title="Last 24/HR" value="0.00" />
-              </div>
-              
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <RainfallCard title="Last 7 Days" value="0.00" />
-                <RainfallCard title="MTD" value="0.00" />
-                <RainfallCard title="YTD" value="0.00" />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-2">
-                <LiveCamCard imageUrl={liveCamUrl} />
-              </div>
-              
-              <div className="space-y-4">
-                <WetBulbCard temperature={50} readingMinutes={5} readingValue={58.9} />
-                
-                <WindCard 
-                  speed={6} 
-                  direction={0} 
-                  directionLabel="N" 
-                />
-              </div>
-            </div>
-            
-            {/* Sensor data row */}
-            <div>
-              <h2 className={`text-lg font-bold mb-4 ${theme === 'light' ? 'text-gray-800' : 'text-white'}`}>
-                Primary Sensor Data
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <SensorCard 
-                  title="Temperature" 
-                  value="10" 
-                  unit="°" 
-                  color="text-yellow-500" 
-                />
-                <SensorCard 
-                  title="Humidity" 
-                  value="10" 
-                  unit="%" 
-                  color="text-white" 
-                />
-                <SensorCard 
-                  title="Dew Point" 
-                  value="10" 
-                  unit="°" 
-                  color="text-blue-500" 
-                />
-                <SensorCard 
-                  title="Heat Index" 
-                  value="NA" 
-                  color="text-white" 
-                />
-              </div>
-            </div>
+          <div className="lg:col-span-1">
+            {weatherData.map((data, index) => (
+              <WeatherCard
+                key={index}
+                temperature={data.temperature}
+                location={data.location}
+                humidity={data.humidity}
+                dewPoint={data.dewPoint}
+              />
+            ))}
           </div>
         </div>
+        
+        <Footer />
       </div>
     </div>
   );
