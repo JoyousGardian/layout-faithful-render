@@ -10,20 +10,21 @@ import WetBulbCard from '@/components/WetBulbCard';
 import WindCard from '@/components/WindCard';
 import LiveCamCard from '@/components/LiveCamCard';
 import TabSelector from '@/components/TabSelector';
+import { getXAxisDataSet, getYAxisDataSet } from '@/lib/utils';
 
-// Sample data with time labels
-const windData = Array.from({ length: 12 }, (_, i) => ({ 
-  name: `${i*2}h`, 
+// Sample data with time labels for simulation
+const generateWindData = () => Array.from({ length: 12 }, (_, i) => ({ 
+  time: `${i*2}h`, 
   value: 10 + Math.random() * 20 
 }));
 
-const tempData = Array.from({ length: 12 }, (_, i) => ({ 
-  name: `${i*2}h`, 
+const generateTempData = () => Array.from({ length: 12 }, (_, i) => ({ 
+  time: `${i*2}h`, 
   value: 15 + Math.random() * 15 
 }));
 
-const pressureData = Array.from({ length: 12 }, (_, i) => ({ 
-  name: `${i*2}h`, 
+const generatePressureData = () => Array.from({ length: 12 }, (_, i) => ({ 
+  time: `${i*2}h`, 
   value: 990 + Math.random() * 10 
 }));
 
@@ -31,6 +32,22 @@ const Index = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('Forecast');
   const [liveCamUrl, setLiveCamUrl] = useState('/placeholder.svg');
+  
+  // State for real-time data
+  const [windDetails, setWindDetails] = useState(generateWindData());
+  const [tempDetails, setTempDetails] = useState(generateTempData());
+  const [pressureDetails, setPressureDetails] = useState(generatePressureData());
+
+  // Simulate real-time updates every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWindDetails(generateWindData());
+      setTempDetails(generateTempData());
+      setPressureDetails(generatePressureData());
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
   
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
@@ -47,7 +64,8 @@ const Index = () => {
                 Measurement Trends
               </h2>
               <LineChart 
-                data={windData} 
+                xDataset={getXAxisDataSet(windDetails)}
+                yDataset={getYAxisDataSet(windDetails)}
                 color="#FFEB3B" 
                 title="Wind Speed" 
                 yAxisLabel="Wind Speed"
@@ -56,7 +74,8 @@ const Index = () => {
             </div>
             
             <LineChart 
-              data={tempData} 
+              xDataset={getXAxisDataSet(tempDetails)}
+              yDataset={getYAxisDataSet(tempDetails)}
               color="#2196F3" 
               title="Outdoor Temperature" 
               yAxisLabel="Temperature °F"
@@ -64,7 +83,8 @@ const Index = () => {
             />
             
             <LineChart 
-              data={pressureData} 
+              xDataset={getXAxisDataSet(pressureDetails)}
+              yDataset={getYAxisDataSet(pressureDetails)}
               color="#4CAF50" 
               title="Barometric Pressure" 
               yAxisLabel="Pressure (mb)"

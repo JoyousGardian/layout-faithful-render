@@ -12,7 +12,8 @@ import {
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface LineChartProps {
-  data: { value: number; name?: string }[];
+  xDataset?: string[];
+  yDataset?: number[];
   color: string;
   title: string;
   yAxisLabel?: string;
@@ -20,7 +21,8 @@ interface LineChartProps {
 }
 
 const LineChart: React.FC<LineChartProps> = ({ 
-  data, 
+  xDataset = [], 
+  yDataset = [], 
   color, 
   title, 
   yAxisLabel,
@@ -28,10 +30,10 @@ const LineChart: React.FC<LineChartProps> = ({
 }) => {
   const { theme } = useTheme();
   
-  // Prepare data with names if not provided
-  const chartData = data.map((item, index) => ({
-    ...item,
-    name: item.name || `${index + 1}h`
+  // Prepare data by combining x and y datasets
+  const chartData = xDataset.map((xValue, index) => ({
+    name: xValue,
+    value: yDataset[index] || 0
   }));
 
   return (
